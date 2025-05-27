@@ -8,7 +8,7 @@ from tqdm import tqdm
 # --- CONFIGURAÇÕES ---
 INSTANCE_DIR = "instances"
 INSTANCE_PREFIX = "ep"
-N_INSTANCES = 6 #mudar aqui
+N_INSTANCES = 10 #mudar aqui
 N_EXECUCOES = 30
 INITIAL_TEMP = 1000
 COOLING_RATE = 0.995
@@ -127,7 +127,7 @@ def main():
     
     results = {}
     
-    for i in range(6, N_INSTANCES + 1):
+    for i in range(1, N_INSTANCES + 1):
         instance_name = f"{INSTANCE_PREFIX}{i:02d}"
         instance_path = os.path.join(INSTANCE_DIR, f"{instance_name}.dat")
         
