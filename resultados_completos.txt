@@ -1,0 +1,11 @@
+=== ep08 ===
+Melhor resultado: 2972588.0
+Menor resultado: 2903840.0
+Média: 2942024.23
+Desvio padrão: 16545.91
+Todos os resultados: [np.float64(2972588.0), np.float64(2968785.0), np.float64(2963601.0), np.float64(2962542.0), np.float64(2957706.0), np.float64(2956861.0), np.float64(2955421.0), np.float64(2954811.0), np.float64(2952728.0), np.float64(2952576.0), np.float64(2952031.0), np.float64(2949473.0), np.float64(2947659.0), np.float64(2946585.0), np.float64(2942896.0), np.float64(2940563.0), np.float64(2939934.0), np.float64(2939377.0), np.float64(2938576.0), np.float64(2935231.0), np.float64(2933070.0), np.float64(2931614.0), np.float64(2930630.0), np.float64(2927172.0), np.float64(2927144.0), np.float64(2923884.0), np.float64(2923198.0), np.float64(2917429.0), np.float64(2912802.0), np.float64(2903840.0)]
+
+
+=== RESUMO GERAL ===
+             Média     Mínimo     Máximo  Desvio Padrão
+ep08  2.942024e+06  2903840.0  2972588.0   18203.224976
