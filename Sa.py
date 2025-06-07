@@ -2,6 +2,20 @@ import random
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import time
+
+BKV = {
+    "ep01": 2118,
+    "ep02": 1378,
+    "ep03": 2850,
+    "ep04": 2730,
+    "ep05": 2624,
+    "ep06": 4690,
+    "ep07": 4440,
+    "ep08": 5020,
+    "ep09": 4568,
+    "ep10": 4390
+}
 
 # Função para ler o arquivo .dat
 def read_instance(filename):
@@ -107,10 +121,13 @@ def neighbor(solution):
 def simulated_annealing(n, W, weights, flavors, incompatibilities,
                         initial_temp=1000.0, final_temp=0.1, alpha=0.98, iter_per_temp=200):
     
+    
     current_solution = initial_solution(n, W, weights, flavors, incompatibilities)
     current_value = evaluate(current_solution, W, weights, flavors, incompatibilities)
     best_solution = current_solution.copy()
     best_value = current_value
+
+    initial_value = evaluate(current_solution, W, weights, flavors, incompatibilities)
 
     T = initial_temp
 
@@ -134,7 +151,7 @@ def simulated_annealing(n, W, weights, flavors, incompatibilities,
 
         T *= alpha
 
-    return best_solution, best_value
+    return best_solution, best_value, initial_value
 
 # Rodar 30 execuções para uma instância
 def run_experiment(instance_filename, output_prefix):
@@ -147,8 +164,11 @@ def run_experiment(instance_filename, output_prefix):
     best_overall_solution = None
     best_overall_value = -1
 
+    start_time = time.time()
+
     for run in range(30):
-        best_solution, best_value = simulated_annealing(n, W, weights, flavors, incompatibilities)
+
+        best_solution, best_value, initial_value = simulated_annealing(n, W, weights, flavors, incompatibilities)
 
         print(f"Run {run+1}: flavor = {best_value}")
         results.append(best_value)
@@ -156,6 +176,8 @@ def run_experiment(instance_filename, output_prefix):
         if best_value > best_overall_value:
             best_overall_value = best_value
             best_overall_solution = best_solution.copy()
+        
+    end_time = time.time()
 
     # Estatísticas
     mean_val = np.mean(results)
@@ -163,11 +185,23 @@ def run_experiment(instance_filename, output_prefix):
     max_val = np.max(results)
     std_val = np.std(results)
 
+    elapsed_time = end_time - start_time
+
+    desvio_si_sf = 100*(initial_value - max_val) / initial_value
+    desvio_sf_otimo = 100*(BKV[output_prefix] - max_val) / BKV[output_prefix]
+
     print("\n=== Statistics ===")
     print(f"Mean: {mean_val:.2f}")
     print(f"Min: {min_val}")
     print(f"Max: {max_val}")
     print(f"Std: {std_val:.2f}")
+
+    print(f"BKV: {BKV[output_prefix]}")
+    print(f"Initial value: {initial_value}")
+    print(f"Final value: {max_val}")
+    print(f"Desvio SI/SF: {desvio_si_sf:.2f}%")
+    print(f"Desvio SF/Otimo: {desvio_sf_otimo:.2f}%")
+    print(f"Time: {elapsed_time:.2f} seconds")
 
     # Gravar boxplot
     plt.figure(figsize=(8,6))
@@ -183,14 +217,28 @@ def run_experiment(instance_filename, output_prefix):
     with open(f'{output_prefix}_best_solution.txt', 'w') as f:
         f.write(f"Best flavor: {best_overall_value}\n")
         f.write("Selected ingredients:\n")
-        f.write(" ".join(map(str, selected)) + "\n")
+        f.write(" ".join(map(str, selected)) + "\n\n")
+        
+        f.write(f"BKV: {BKV[output_prefix]}\n")
+        f.write(f"Initial value: {initial_value}\n")
+        f.write(f"Final value: {max_val}\n")
+        f.write(f"Desvio SI/SF: {desvio_si_sf:.2f}%\n")
+        f.write(f"Desvio SF/Ótimo: {desvio_sf_otimo:.2f}%\n")
+        f.write(f"Time: {elapsed_time:.2f} seconds\n")
 
     # Gravar tabela de resultados
     with open(f'{output_prefix}_results.txt', 'w') as f:
         f.write(f"Mean: {mean_val:.2f}\n")
         f.write(f"Min: {min_val}\n")
         f.write(f"Max: {max_val}\n")
-        f.write(f"Std: {std_val:.2f}\n")
+        f.write(f"Std: {std_val:.2f}\n\n")
+        
+        f.write(f"BKV: {BKV[output_prefix]}\n")
+        f.write(f"Initial value: {initial_value}\n")
+        f.write(f"Final value: {max_val}\n")
+        f.write(f"Desvio SI/SF: {desvio_si_sf:.2f}%\n")
+        f.write(f"Desvio SF/Ótimo: {desvio_sf_otimo:.2f}%\n")
+        f.write(f"Time: {elapsed_time:.2f} seconds\n\n")
         f.write("\nAll results:\n")
         for val in results:
             f.write(f"{val}\n")
