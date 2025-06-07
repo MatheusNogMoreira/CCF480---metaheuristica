@@ -1,5 +1,0 @@
-ep01:
-  Melhor: 227046.0
-  Média: 224935.83
-  Desvio Padrão: 1054.71
-
