@@ -28,15 +28,14 @@ def read_instance(filename):
     # 1ª linha: n, incompat_count, W
     n, incompat_count, W = map(int, lines[0].split())
 
-    # Ler sabores: podem estar em várias linhas até totalizar n valores
     flavors = []
-    idx = 2  # começa após a linha em branco da linha 1
+    idx = 2
     while len(flavors) < n:
         if lines[idx] != '':
             flavors.extend(map(int, lines[idx].split()))
         idx += 1
 
-    # Ler pesos: mesmas regras, logo após sabores
+    # Ler pesos
     weights = []
     while len(weights) < n:
         if lines[idx] != '':
