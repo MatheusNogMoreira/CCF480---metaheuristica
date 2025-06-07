@@ -8,30 +8,34 @@ def read_instance(filename):
     with open(filename, 'r') as f:
         lines = f.readlines()
 
-    # Parse primeira linha
-    n, W, _ = map(int, lines[0].split())
+    # Remove linhas em branco e espaços
+    lines = [line.strip() for line in lines]
 
-    # Pega pesos e sabores
-    weights = []
+    # 1ª linha: n, incompat_count, W
+    n, incompat_count, W = map(int, lines[0].split())
+
+    # Ler sabores: podem estar em várias linhas até totalizar n valores
     flavors = []
-
-    idx = 1
-    while len(weights) < n:
-        weights.extend(map(int, lines[idx].split()))
-        idx += 1
-
+    idx = 2  # começa após a linha em branco da linha 1
     while len(flavors) < n:
-        flavors.extend(map(int, lines[idx].split()))
+        if lines[idx] != '':
+            flavors.extend(map(int, lines[idx].split()))
         idx += 1
 
-    # Pega pares de incompatibilidade
+    # Ler pesos: mesmas regras, logo após sabores
+    weights = []
+    while len(weights) < n:
+        if lines[idx] != '':
+            weights.extend(map(int, lines[idx].split()))
+        idx += 1
+
+    # Ler incompatibilidades
     incompatibilities = set()
-    for line in lines[idx:]:
-        parts = line.strip().split()
-        if len(parts) == 2:
-            j, k = map(int, parts)
-            incompatibilities.add((j - 1, k - 1))  # índice base 0
-            incompatibilities.add((k - 1, j - 1))  # bidirecional
+    for line in lines[idx:idx+incompat_count]:
+        if line != '':
+            j, k = map(int, line.split())
+            incompatibilities.add((j - 1, k - 1))
+            incompatibilities.add((k - 1, j - 1))
 
     return n, W, weights, flavors, incompatibilities
 
@@ -101,7 +105,7 @@ def neighbor(solution):
 
 # SA
 def simulated_annealing(n, W, weights, flavors, incompatibilities,
-                        initial_temp=1000.0, final_temp=0.1, alpha=0.98, iter_per_temp=100):
+                        initial_temp=1000.0, final_temp=0.1, alpha=0.98, iter_per_temp=200):
     
     current_solution = initial_solution(n, W, weights, flavors, incompatibilities)
     current_value = evaluate(current_solution, W, weights, flavors, incompatibilities)
@@ -193,7 +197,7 @@ def run_experiment(instance_filename, output_prefix):
 
 # Main
 if __name__ == "__main__":
-    instance_filename = "instances/ep05.dat"
-    output_prefix = "ep05"
-
-    run_experiment(instance_filename, output_prefix)
+    for i in range(1, 11):
+        filename = f"instances/ep{str(i).zfill(2)}.dat"
+        output_prefix = f"ep{str(i).zfill(2)}"
+        run_experiment(filename, output_prefix)
