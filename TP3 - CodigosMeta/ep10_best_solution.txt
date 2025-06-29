@@ -1,0 +1,10 @@
+Best flavor: 4266
+Selected ingredients:
+87 304 310 376 384 440 501 508 572 603 721 823 831 912 958 1027 1083 1104 1194 1265 1308 1341 1354 1375 1566 1882 1943
+
+BKV: 4390
+Initial value: 4260
+Final value: 4266
+Desvio SI/SF: -0.14%
+Desvio SF/Ótimo: 2.82%
+Time: 31731.07 seconds
